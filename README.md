@@ -1,6 +1,9 @@
 ## linux-kernel-coding-style
 
+> THIS PROJECT IS UNDER DEVELOPMENT, after all things done, I'll push it to melpa
+
 [Linux Kernel Coding Style](https://github.com/torvalds/linux/blob/master/Documentation/process/coding-style.rst) for emacs.
+
 ---
 [![License GPLv2](https://img.shields.io/badge/license-GPL_v2-green.svg)](http://www.gnu.org/licenses/gpl-2.0.html)
 [![MELPA](http://melpa.org/packages/linux-kernel-coding-style-badge.svg)](http://melpa.org/#/linux-kernel-coding-style)
