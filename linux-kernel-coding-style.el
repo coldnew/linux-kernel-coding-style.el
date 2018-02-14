@@ -30,6 +30,42 @@
 ;;; Code:
 
 (eval-when-compile (require 'cl))
+(require 'cc)
+
+(defun linux-kernel-coding-style/c-lineup-arglist-tabs-only (ignored)
+  "Line up argument lists by tabs, not spaces"
+  (let* ((anchor (c-langelem-pos c-syntactic-element))
+	 (column (c-langelem-2nd-pos c-syntactic-element))
+	 (offset (- (1+ column) anchor))
+	 (steps (floor offset c-basic-offset)))
+    (* (max steps 1)
+       c-basic-offset)))
+
+;; Add Linux kernel style
+(add-hook 'c-mode-common-hook
+	  (lambda ()
+	    (c-add-style "linux-kernel"
+			 '("linux" (c-offsets-alist
+				    (arglist-cont-nonempty
+				     c-lineup-gcc-asm-reg
+				     linux-kernel-coding-style/c-lineup-arglist-tabs-only))))))
+
+(defun linux-kernel-coding-style/setup ()
+  (let ((filename (buffer-file-name)))
+    ;; Enable kernel mode for the appropriate files
+    (when (and filename
+	       (or (locate-dominating-file filename "Kbuild")
+		   (locate-dominating-file filename "Kconfig")
+		   (save-excursion (goto-char 0)
+				   (search-forward-regexp "^#include <linux/\\(module\\|kernel\\)\\.h>$" nil t))))
+      (setq indent-tabs-mode t)
+      (setq tab-width 8)
+      (setq c-basic-offset 8)
+      (c-set-style "linux-kernel")
+      (message "Setting up indentation for the linux kernel"))))
+
+(add-hook 'c-mode-hook 'linux-kernel-coding-style/setup)
+
 
 
 (provide 'linux-kernel-coding-style)
